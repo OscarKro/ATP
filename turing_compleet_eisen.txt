@@ -1,0 +1,12 @@
+1. weide: creeer de instructie array van onbekende grootte en zet pointer op 1, en creer de memory array en zet de pointer op 0
+2. wim: verhoog memory pointer
+3. jet: verlaag memory pointer
+4. duif: go-to andere instructie
+5. schaap: verhoog de byte waar de memory pointer naar wijst met 1
+6. lam: verlaag de byte waar de memory pointer naar wijst met 1
+7. aap: als memory adres op parameter 1 gelijk is aan memory adres parameter 2 ga dan naar parameter instructie adres 3, anders door naar volgende instructie (dus: aap 5 5 12, sprint naar 12, aap 4 5 12, springt naar volgende instructie)
+8. noot: zet paramater 1 in het memory op memory adres
+9. mies: cout de waarde van de byte waar de mp nu naar wijst
+
+instructies gescheiden door new lines
+parameters gescheiden door spaties
