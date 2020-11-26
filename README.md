@@ -2,6 +2,7 @@
 This repo contains the interpeter (and later the compiler) for the aapNootMies language
 
 ## aapNootMies
+![image](./Aap-Noot-Mies-Leesplankje.jpg)
 aapNootMies is a turing complete esoteric programming language that is very basic an pretty similar to a dressed down version of assembly. You can loop and increase and decrease numbers.
 Some instructions need parameters, others don't. Depending on what instruction is read, the user can alter memory. 
 It exists completely of so called "weides". Every weide object contains two lists, and two counters. One list contains lists which contain every individual instruction and respective paramaters. The other list is the memory. Which instruction is executed is determined by where the program counter points to in the instruction list. Which memory location is altered is determined by where the memory counter points to in the memory list. By altering the program counter, one can decide what instruction is carried out. By altering the memory counter, one can alter the specific piece of memory. Everytime a state is changed. The language returns a new weide with a new state. Meaning the original state is never changed.
