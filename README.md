@@ -70,6 +70,8 @@ This small example uses example one, but as a function
 14. duif 2 (start the exection of hok from line 1 to 6 by jumping to the line after the hok)
 15. vuur
 
+See aapnootmies.aap for a working example
+
 ## source code
 Everything is written in (mostly) functional python and the only object there is, is a weide object. The weide object contains the current state, so it holds the instruction memory list, the memory list, the program counter and the memory counter. Everytime a state is changed by an instruction, a new weide object is created containing a copy of the old weide, with new values. Meaning that an old state is never changed. Currently, the old states are not saved and will probably be removed by the Python garbage collector.
 
