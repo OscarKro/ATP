@@ -20,7 +20,7 @@ It's good practice to not create white lines in between instructions. These are 
 
 ### functions
 A function is created by writing a "hok" instruction and a "weide" instruction with 
-other instructions in between. Whenever the algorithm reads the "hok" instruction during execution, it skips all code untill it sees a "weide" instruction, it then begins to execute the next piece of code after the "weide" instruction. "You go back into free space, a weide". Meaning you can create incapsulated pieces of code in between a hok and weide instruction that are never used. When you use a "duif" instruction to jump to the line that contains the first instruction after the "hok" you want to execute, the algorithm didn't see the "hok" instruction so it just starts to execute whatever code it reads. When the program hits the first "weide" instruction, the program counter is set to the value that is on adres 0 of the memory. Meaning you have a link register on address zero of the memory. So by setting the current instruction number, plus one, on address 0 of the memory you can continue your program wherever it was. You can create as many "hok" instruction as you want. As long as you never forget to close them with a weide.
+other instructions in between. Whenever the algorithm reads the "hok" instruction during execution, it skips all code untill it sees a "weide" instruction, it then begins to execute the next piece of code after the "weide" instruction. "You go back into free space, a weide". Meaning you can create incapsulated pieces of code in between a hok and weide instruction that are never used. When you use a "duif" instruction to jump to the line that contains the first instruction after the "hok" you want to execute, the algorithm didn't see the "hok" instruction so it just starts to execute whatever code it reads. When the program hits the first "weide" instruction, the program counter is set to the value that is on adres 0 of the memory. Meaning you have a link register on address zero of the memory. So by setting the current instruction number, plus one, on address 0 of the memory you can continue your program wherever it was after it called the function. You can create as many "hok" instruction as you want. As long as you never forget to close them with a weide. Every hok can obviously acces all memory, meaning that you can give as much parameters as you want.
 
 | instruction | required paramaters | explanation |
 | ----------- | ----------- | ----------- |
@@ -69,6 +69,8 @@ This small example uses example one, but as a function
 13. wim (increase to make sure address 0 is left alone)
 14. duif 2 (start the exection of hok from line 1 to 6 by jumping to the line after the hok)
 15. vuur
+
+See aapnootmies.aap for a working example
 
 ## source code
 Everything is written in (mostly) functional python and the only object there is, is a weide object. The weide object contains the current state, so it holds the instruction memory list, the memory list, the program counter and the memory counter. Everytime a state is changed by an instruction, a new weide object is created containing a copy of the old weide, with new values. Meaning that an old state is never changed. Currently, the old states are not saved and will probably be removed by the Python garbage collector.
