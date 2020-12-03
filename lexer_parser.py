@@ -1,6 +1,5 @@
 import copy
-from ANMtokens import *
-from typing import *
+from typing import Tuple,Union
 from ANMdicts import *
 class Reader:
     def __init__(self):
@@ -97,8 +96,8 @@ class Lexer:
         #check for wrong words, number of parameters and if they are numbers
         #============================================================================
         errorList = []
-        if (lexedList[0] != "weide"):
-            errorList.append("SYNTAX ERROR: first instruction should always be 'weide'")
+        # if (lexedList[0] != "weide"):
+        #     errorList.append("SYNTAX ERROR: first instruction should always be 'weide'")
         errorList += self.__seek_syntax_errors(lexedList) # check if the syntax is correct, if not, errorList is filled with errors
         return (lexedList,errorList)
 

@@ -33,7 +33,7 @@ parser = Parser()
 parsedData = parser.parse(lexedData[0])
 #execute
 #============================================================================
-w = Weide(parsedData,[],1,0) #create the first weide with the pc to the first instruction
+w = Weide(parsedData,[],0,1) #create the first weide with the pc to the first instruction, and the mc set to adress 1 so the linking register is initialy left alone
 while True:
     instruction = lambdaDict.get(w.instructionMemoryList[w.pc][0],None)
     nrOfParam = checkNrParamDict.get(w.instructionMemoryList[w.pc][0],None)
