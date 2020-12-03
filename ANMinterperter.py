@@ -1,15 +1,39 @@
 from lexer_parser import *
 from ANMdicts import *
 import os.path
+import sys
 
 def stop():
     print("couldn't execute program. Errors found")
     exit()
 print("filepath: ", end = ' ')
+
 i = input()
 if not os.path.isfile(i):
     print("No file found")
     stop()
+
+#test functie
+def add(a,b):
+    return a + b
+
+#vragen of dit is wat Jan bedoelde?
+def debug_function(f : callable, *args) -> callable:
+    """Function to test a function with or without arguments
+
+    Args:
+        f (callable): The function you want to test
+
+    Returns:
+        callable: The result of the function or a string with an error
+    """
+    print("starting debug now")
+    try:
+        return  f(*args)
+    except:
+        return "error found: " + str(sys.exc_info()[0])
+
+print(debug_function(add, 3 , 5))
 
 #Read the file with instructions and print and exit if an error occured
 #============================================================================
