@@ -13,9 +13,11 @@ if not os.path.isfile(i):
     print("No file found")
     stop()
 
-#test functie
+#test functie voor de decorator, niet gebruiken.
 def add(a,b):
     return a + b
+
+
 
 #vragen of dit is wat Jan bedoelde?
 def debug_function(f : callable, *args) -> callable:
@@ -25,15 +27,34 @@ def debug_function(f : callable, *args) -> callable:
         f (callable): The function you want to test
 
     Returns:
-        callable: The result of the function or a string with an error
+        callable: The result of the function or an error
     """
-    print("starting debug now")
     try:
         return  f(*args)
     except:
-        return "error found: " + str(sys.exc_info()[0])
+        return sys.exc_info()
 
-print(debug_function(add, 3 , 5))
+#nog een (python) decorator, die dan wel goed??, volgens de definitie: 
+#"By definition, a decorator is a function that takes another function and extends the behavior of the latter function without explicitly modifying it."
+# source : "https://realpython.com/primer-on-python-decorators/"
+@debug_function
+def dubble_down(f : callable, *args):
+    """Python decorator function that calls another function twice and calls the '+' operator on both
+
+    Args:
+        f (callable): The function you want to call
+
+    Returns:
+        [type]: the parameter function called twice with a '+' operator called on them
+    """
+    return f(*args) + f(*args)
+
+
+# print(debug_function(add, 'a' , 5))
+# print(debug_function(add,5,5))
+# x = lambda : add(5,5)
+# print(dubble_down(x))
+# print(dubble_down(add,10,10))
 
 #Read the file with instructions and print and exit if an error occured
 #============================================================================

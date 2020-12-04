@@ -1,7 +1,7 @@
 # ATP
 This repo contains the interpeter (and later the compiler) for the aapNootMies language
 
-## aapNootMies
+## AapNootMies
 ![image](./Aap-Noot-Mies-Leesplankje.jpg)
 aapNootMies is a turing complete esoteric programming language that is very basic an pretty similar to a dressed down version of assembly. You can loop, increase and decrease numbers, check if two addresses are equal and create very basic functions. So you can do pretty much any mathmetic calculation.
 Some instructions need parameters, others don't. Depending on what instruction is read, the user can alter memory. You can read all instructions in the table below.
@@ -9,16 +9,16 @@ It exists completely of so called "weides". Every weide object contains two list
 
 Which memory location is altered is determined by where the memory counter (or memory pointer, mp) points to in the memory list.  By altering the memory pointer, one can alter the specific piece of memory. Everytime a state is changed, the language returns a new weide with a new state. Meaning the original state is never changed.
 
-### error handeling
+### Error handling
 The interperter has some very, very basic error handeling. Wrong or to few parameters will be caught and so will wrong instructions or the wrong file extension.
 Inline comments are not possible as of yet.
 
-## instructions to run and use
+## Instructions to run and use
 To run, type in the terminal: "ANMinterperter.py" and follow the steps. All ANM files need to have the extension ".aap"
 All instructions need to be seperated by new lines and all parameters need to be seperated by spaces. You can use a tab to create more readable code for yourself. Parameters may only be integers, not other instructions. When the isntructions to jump to other instructions are used. The first instruction is 1 (not 0) and count from there.
 It's good practice to not create white lines in between instructions. These are filtered out by the algorithm. So when you want to jump to instruction 10 in your file, it could actually be instruction 8 if there are two white lines somewhere in the file that you see, but the algortihm skips. You could also keep track of this yourself ofcoarse. It is also best practice to never use address 0 of the memory, as this is used for functions as a linker register. To ensure this is enforced, the algorithm starts with both the program counter and the memory counter set to 1. The user has to explicitly jump to memory address 0 to alter the linker register. Address 0 of the instruction register does not exist. So setting the program counter to 0 will start undefined behaviour.
 
-### functions
+### Functions
 A function is created by writing a "hok" instruction and a "weide" instruction with 
 other instructions in between. Whenever the algorithm reads the "hok" instruction during execution, it skips all code untill it sees a "weide" instruction, it then begins to execute the next piece of code after the "weide" instruction. "You go back into free space, a weide". Meaning you can create incapsulated pieces of code in between a hok and weide instruction that are never used. When you use a "duif" instruction to jump to the line that contains the first instruction after the "hok" you want to execute, the algorithm didn't see the "hok" instruction so it just starts to execute whatever code it reads. When the program hits the first "weide" instruction, the program counter is set to the value that is on adres 0 of the memory. Meaning you have a link register on address zero of the memory. So by setting the current instruction number, plus one, on address 0 of the memory you can continue your program wherever it was after it called the function. You can create as many "hok" instruction as you want. As long as you never forget to close them with a weide. Every hok can obviously acces all memory, meaning that you can give as much parameters as you want.
 
@@ -39,7 +39,7 @@ other instructions in between. Whenever the algorithm reads the "hok" instructio
 | vuur | 0 | stop execution
 
 
-### example 1, increase register
+### Example 1, increase register
 This small example below will count from 1 to 10 and display each result
 
 1. noot 0 (place 0 at wherever the memory pointer currently points to, which is 1 because of the first wim)
@@ -52,7 +52,7 @@ This small example below will count from 1 to 10 and display each result
 8. duif 6 (jump to instruction line 6)
 9. vuur (quit the program, or more shakespeary: burn thy pasture and see that thy and it are now barren!)
 
-### example 2, increase register within function
+### Example 2, increase register within function
 This small example uses example one, but as a function
 
 1. hok (start of function, skipped initialy)
@@ -72,6 +72,6 @@ This small example uses example one, but as a function
 
 See aapnootmies.aap for a working example
 
-## source code
+## Source code
 Everything is written in (mostly) functional python and the only object there is, is a weide object. The weide object contains the current state, so it holds the instruction memory list, the memory list, the program counter and the memory counter. Everytime a state is changed by an instruction, a new weide object is created containing a copy of the old weide, with new values. Meaning that an old state is never changed. Currently, the old states are not saved and will probably be removed by the Python garbage collector.
 

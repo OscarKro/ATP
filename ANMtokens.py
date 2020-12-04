@@ -5,7 +5,7 @@ def cp(x):
     """Function to quickly copy an object
 
     Args:
-        x (anything): THe thing that needs to be copied
+        x (anything): The thing that needs to be copied
 
     Returns:
         anything: the copied thing
