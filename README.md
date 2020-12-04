@@ -7,7 +7,7 @@ aapNootMies is a turing complete esoteric programming language that is very basi
 Some instructions need parameters, others don't. Depending on what instruction is read, the user can alter memory. You can read all instructions in the table below.
 It exists completely of so called "weides". Every weide object contains two lists, and two counters. One list contains lists that contain every individual instruction and respective parameter(s). The other list is the memory. Which instruction is executed is determined by where the program counter points to in the instruction list. After each instruction is executed, the program counter is increased by one. By altering the program counter, you can decide what instruction is carried out.
 
-Which memory location is altered is determined by where the memory counter (or memory pointer, mp) points to in the memory list.  By altering the memory pointer, one can alter the specific piece of memory. Everytime a state is changed, the language returns a new weide with a new state. Meaning the original state is never changed.
+Which memory location is altered is determined by where the memory counter (or memory pointer, mp) points to in the memory list. By altering the memory pointer, one can alter the specific piece of memory. The max size of the memory is 1001. Where adres 0 is the linking register and the other 1000 can be used for whatever you wish. Everytime a state is changed, the language returns a new weide with a new state. Meaning the original state is never changed.
 
 ### Error handling
 The interperter has some very, very basic error handeling. Wrong or to few parameters will be caught and so will wrong instructions or the wrong file extension.
@@ -15,7 +15,7 @@ Inline comments are not possible as of yet.
 
 ## Instructions to run and use
 To run, type in the terminal: "ANMinterperter.py" and follow the steps. All ANM files need to have the extension ".aap"
-All instructions need to be seperated by new lines and all parameters need to be seperated by spaces. You can use a tab to create more readable code for yourself. Parameters may only be integers, not other instructions. When the isntructions to jump to other instructions are used. The first instruction is 1 (not 0) and count from there.
+All instructions need to be seperated by new lines and all parameters need to be seperated by spaces. You can use a tab to create more readable code for yourself. Parameters may only be integers, not other instructions. When the instructions to jump to other instructions are used. The first instruction is 1 (not 0) and count from there.
 It's good practice to not create white lines in between instructions. These are filtered out by the algorithm. So when you want to jump to instruction 10 in your file, it could actually be instruction 8 if there are two white lines somewhere in the file that you see, but the algortihm skips. You could also keep track of this yourself ofcoarse. It is also best practice to never use address 0 of the memory, as this is used for functions as a linker register. To ensure this is enforced, the algorithm starts with both the program counter and the memory counter set to 1. The user has to explicitly jump to memory address 0 to alter the linker register. Address 0 of the instruction register does not exist. So setting the program counter to 0 will start undefined behaviour.
 
 ### Functions
@@ -48,7 +48,7 @@ This small example below will count from 1 to 10 and display each result
 4. jet (decrease the memory pointer by one to let it point to 1 again)
 5. schaap (add one to the byte where the memory pointer points to. So that is now +1)
 6. mies (print the value from where the memory pointer points to)
-7. aap 1 2 10 (jump to instruction line 10 if memory address 0 is equal to address 1, if not, continue with the next instruction)
+7. aap 1 2 9 (jump to instruction line 10 if memory address 0 is equal to address 1, if not, continue with the next instruction)
 8. duif 6 (jump to instruction line 6)
 9. vuur (quit the program, or more shakespeary: burn thy pasture and see that thy and it are now barren!)
 

@@ -175,7 +175,7 @@ def Noot(w : Weide, v : int) -> Weide:
         Weide: A new weide object with the value set in the memory at the location the memory counter is currently pointing to
     """
     w = Weide(cp(w.instructionMemoryList),cp(w.memoryList),cp(w.pc)+1,cp(w.mc))
-    w.memoryList.insert(w.mc,cp(v))
+    w.memoryList[w.mc] = cp(v)
     return w
 
 

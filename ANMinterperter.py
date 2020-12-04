@@ -17,9 +17,6 @@ if not os.path.isfile(i):
 def add(a,b):
     return a + b
 
-
-
-#vragen of dit is wat Jan bedoelde?
 def debug_function(f : callable, *args) -> callable:
     """Function to test a function with or without arguments
 
@@ -34,7 +31,6 @@ def debug_function(f : callable, *args) -> callable:
     except:
         return sys.exc_info()
 
-#nog een (python) decorator, die dan wel goed??, volgens de definitie: 
 #"By definition, a decorator is a function that takes another function and extends the behavior of the latter function without explicitly modifying it."
 # source : "https://realpython.com/primer-on-python-decorators/"
 @debug_function
@@ -55,6 +51,7 @@ def dubble_down(f : callable, *args):
 # x = lambda : add(5,5)
 # print(dubble_down(x))
 # print(dubble_down(add,10,10))
+# exit()
 
 #Read the file with instructions and print and exit if an error occured
 #============================================================================
@@ -78,7 +75,8 @@ parser = Parser()
 parsedData = parser.parse(lexedData[0])
 #execute
 #============================================================================
-w = Weide(parsedData,[],0,1) #create the first weide with the pc to the first instruction, and the mc set to adress 1 so the linking register is initialy left alone
+l = [0] * 1001 # create the size 1000 memory
+w = Weide(parsedData,l,0,1) #create the first weide with the pc to the first instruction, and the mc set to adress 1 so the linking register is initialy left alone
 while True:
     instruction = lambdaDict.get(w.instructionMemoryList[w.pc][0],None)
     nrOfParam = checkNrParamDict.get(w.instructionMemoryList[w.pc][0],None)
