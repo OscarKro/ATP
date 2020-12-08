@@ -1,17 +1,25 @@
 from ANMCompilerTokens import *
+
 def hold_console():
     i = input()
     exit()
 
-wordSize = 4
 memorySize = 1000
-a = ""
-a += start_code_section()
-a += branch_to("_ANM")
-a += branch_to("_startup")
-a += start_of_ANM_and_allocate_memory_on_stack(memorySize * wordSize,"_ANM")
-a += deallocate_memory_on_stack_and_end_ANM(memorySize * wordSize)
+a = start_code_section()
+
+a += Wim()
+a += Jet()
+a += Does()
+a += Duif()
+a += Schaap()
+a += Lam()
+a += Teun()
+
+a += start_of_ANM_and_allocate_memory_on_stack(memorySize,"_ANM")
+a += set_scratch_registers(5)
+a += branch_to("does")
+a += deallocate_memory_on_stack_and_end_ANM()
 print(a)
-hold_console()s
+hold_console()
 
 
