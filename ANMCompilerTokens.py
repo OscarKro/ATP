@@ -30,7 +30,7 @@ def branch_to(label : str) -> str:
 	Returns:
 		str: A string containing assembly code
 	"""
-	return "\nbl " + label + "\n"
+	return "\nbl " + label
 
 
 def zipWith(f: Callable[[A, B], C], l1: List[A], l2: List[B]) -> List[C]:
@@ -59,10 +59,10 @@ def create_move(dest : str, value : int) -> str:
 	return "\nmov " + dest + ", #" + str(value)
 
 def set_scratch_registers(*args : int) -> str:
-	"""Function to create assembly move instructions to set values into registers r0, r1, r2,r3
+	"""Function to create assembly move instructions to set values into registers r0, r1, r2,r3.
 
 	Args:
-		*args : all the args as integers you want to set in registers r0 / r3
+		*args : all the args as integers you want to set in registers r0 / r3. The first paramater will be set in r0, the second in r1 etc.
 
 	Returns:
 		str: A string with a move assembly function on each line for each respective parameter
@@ -84,25 +84,34 @@ def start_of_ANM_and_allocate_memory_on_stack(length : int, label : str) -> str:
 	Returns:
 		str: A string containing assembly code
 	"""
-	pushRegisters = ":\npush {r4,r5,r6,r7,r8,r9,r10,r11,lr}" # push all original registers for safekeeping
+	pushRegisters = ":\npush {r4,r5,r6,lr}" # push all original registers for safekeeping
 	moveSpToR0 = "\nmov r4, sp" # set the stack pointer into r4, which is now the "memory pointer"
-	moveSpToR1 = "\nmov r5, r0" # also keep the original start of the memory in r5 so we can always jump there if needed
+	moveSpToR1 = "\nmov r5, r4" # also keep the original start of the memory in r5 so we can always jump there or get it if needed
+	movePcToR6 = "\nmov r6, pc" # move the program counter to R6
+	subOneInsFromR6 = "\nsub r6, #4" # substract 4 from the pc adress, so it now points to instruction 0 of the base ANM function, which is used by duif
 	add = "\nsub r4, #1" # point the memory adress away from adress 0, so it it starts at adress 1
 	allocate = "\nsub sp, #"+ str(length)# this jumps 4 * length in stack to alocate the memory. Each "word" is 4 bytes.
 
 
 	return "\n\n" + label + pushRegisters + moveSpToR0 + moveSpToR1 + add + allocate
 
-def deallocate_memory_on_stack_and_end_ANM() -> str:
-	"""Function that stops the execution of ANM code and pops the lr back in to the pc to resume where ever other code was
+
+def Hok() -> str:
+	"""Function to jump to whatever is set in r0. Used for the skipping of code to the next weide instruction
 
 	Returns:
-		str: A string containing assembly code
+		str: A string containing assembly
 	"""
-	label = "\n_exit_ANM:"
-	deallocate = "\nmov sp, r5" #place the original stack pointer back into r1
-	popRegisters = "\npop {r4,r5,r6,r7,r8,r9,r10,r11,pc}\n" # pop all the registers back
-	return "\n" + label + deallocate + popRegisters
+	return "\nmov pc, r0"
+
+def Weide() -> str:
+	"""Function to create a string that moves the content of r5 (the adress 0 of the memory where the user linking register is) to the program counter
+
+	Returns:
+		str: A string containing assembly
+	"""
+	return "\nmov pc, [r5]"
+
 
 def Wim() -> str:
 	"""Function to create a label that adds one to the memory pointer
@@ -116,6 +125,7 @@ def Wim() -> str:
 	pop = "\npop {pc}"
 	return "\n" + label + push + increaseMemoryCounter + pop
 
+
 def Jet() -> str:
 	"""Function to create a label that substracts one from the memory pointer
 
@@ -127,6 +137,7 @@ def Jet() -> str:
 	decreaseMemoryCounter = "\nadd r4, #1" #decrease the memory counter by one word
 	pop = "\npop {pc}"
 	return "\n" + label + push + decreaseMemoryCounter + pop
+
 
 def Does() -> str:
 	"""Function to create a label to set the memory counter to whatever is set in r0
@@ -140,6 +151,7 @@ def Does() -> str:
 	pop = "\npop {pc}"
 	return "\n" + label + push + setMemoryCounter + pop
 
+
 def Duif() -> str:
 	"""Function to create a label to set the program counter to whatever is in r0
 
@@ -147,11 +159,13 @@ def Duif() -> str:
 		str: A string containing assembly
 	"""
 	label = "\nduif:"
+	add = "\nadd r0,r6" # get the original pc from r6, and add this to r0, this will be where the program counter needs to continue its execution
 	code = "\nmov pc, r0"
-	return "\n" + label + code  #create a duif label and set the value of r0 in the program counter
+	return "\n" + label + add + code  #create a duif label and set the value of r0 in the program counter
+
 
 def Schaap() -> str:
-	"""Function to create a label to add one to wherever the memory counter is pointing to
+	"""Function to create a label to add one to wherever the memory counter (r4) is pointing to
 
 	Returns:
 		str: A string containing assembly
@@ -162,8 +176,9 @@ def Schaap() -> str:
 	pop = "\npop {pc}"
 	return "\n" + label + push + add + pop
 
+
 def Lam() -> str:
-	"""Function to create a label to substract one from wherever the memory counter is pointing to
+	"""Function to create a label to substract one from wherever the memory counter (r4) is pointing to
 
 	Returns:
 		str: A string containing assembly
@@ -174,7 +189,13 @@ def Lam() -> str:
 	pop = "\npop {pc}"
 	return "\n" + label + push + sub + pop
 
+
 def Teun() -> str:
+	"""Function to create a label to place the value of r0 in to the memory to where the memory pointer on r4 is currently pointing to
+
+	Returns:
+		str: A string containing assembly
+	"""
 	label = "\nteun:"
 	push = "\npush {lr}"
 	add = "\nadd r0, r5" # set the pointer to the correct memory adress in r0, using r5, which holds the stack pointer from when the memory was still to be created, so adress 0
@@ -182,10 +203,52 @@ def Teun() -> str:
 	pop = "\npop {pc}"
 	return "\n" + label + push + add + mov + pop
 
-def Aap(label : str) -> str:
+
+def Aap() -> str:
+	"""Function to create a label to cmp r0 with r1 and go to r2 if they are equal. r0, r1 and r2 should all be memory adresses
+
+	Returns:
+		str: A string containing assembly code
+	"""
 	label = "\naap:"
 	push = "\npush {lr}"
-	#compare two registers
-	# branch if equal to the label. How to do so?
-	# pop the lr in to pc 
-	# ask wouter how to do beq?
+	getAddress0 = "\nmov r0, [r0]" #get the content of the first parameter from the stack memory and place it in r0
+	compare = "\ncmp r0, [r1]" #compare the content of r0 with the content on adress r1 from the stack memory
+	beq = "\nbeq r2" #branch to the third paramater if these two are equal
+	pop = "\npop {pc}"
+	return "\n" + label + push + getAddress0 + compare + beq + pop
+
+
+def Noot () -> str:
+	"""Function to create a label to place r0 in the adress thats on r4, the memory pointer
+
+	Returns:
+		str: A string containing assembly
+	"""
+	label = "\nnoot:"
+	push = "\npush {lr}"
+	setValue = "\nmov [r4], r0" # write the value of r0 into the adress thats on r4, which is the memory counter
+	pop = "\npop {pc}"
+	return "\n" + label + push + setValue + pop
+
+
+def Mies() -> str:
+	"""This function needs to be made using c++, ask Jan?
+
+	Returns:
+		str: nothing
+	"""
+	return "\nmov pc, lr"
+
+
+def Vuur() -> str:
+	"""Function that creates a label that stops the execution of ANM code and pops the lr back in to the pc to resume where other code was
+
+	Returns:
+		str: A string containing assembly code
+	"""
+	label = "\nvuur:"
+	deallocate = "\nmov sp, r5" #place the original stack pointer back into r1
+	popRegisters = "\npop {r4,r5,r6,pc}\n" # pop all the registers back
+	return "\n" + label + deallocate + popRegisters
+

@@ -1,5 +1,5 @@
 import copy
-from typing import Tuple,Union
+from typing import Tuple,Union,List
 from ANMdicts import *
 import time
 class Reader:
