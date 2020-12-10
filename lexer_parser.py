@@ -71,6 +71,8 @@ class Lexer:
             return []
         nrOfParam = checkNrParamDict.get(l[0],None)
         if nrOfParam != None:
+            if (l[0] == "duif" and l[1] <= 0):
+                return ["SYNTAX ERROR: 'Duif' instruction cannot jump to 0 or negative numers"] + self.__seek_syntax_errors([])
             if nrOfParam > 0:
                 if 1 + nrOfParam > len(l):
                     return ["SYNTAX ERROR: last instruction does not have the correct amount of instruction"] + self.__seek_syntax_errors([])

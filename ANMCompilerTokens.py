@@ -32,6 +32,17 @@ def branch_to(label : str) -> str:
 	"""
 	return "\nbl " + label
 
+def create_label(label :str) ->str:
+	"""Function to create a label in assembly		
+
+	Args:
+		label (str): The name the label needs to have
+
+	Returns:
+		str: A string containing assembly
+	"""
+	return "\n" + label + ":"
+
 
 def zipWith(f: Callable[[A, B], C], l1: List[A], l2: List[B]) -> List[C]:
 	"""Function to zip two iterables together and call a function on each element, made by Jan Halsema
@@ -87,13 +98,12 @@ def start_of_ANM_and_allocate_memory_on_stack(length : int, label : str) -> str:
 	pushRegisters = ":\npush {r4,r5,r6,lr}" # push all original registers for safekeeping
 	moveSpToR0 = "\nmov r4, sp" # set the stack pointer into r4, which is now the "memory pointer"
 	moveSpToR1 = "\nmov r5, r4" # also keep the original start of the memory in r5 so we can always jump there or get it if needed
-	movePcToR6 = "\nmov r6, pc" # move the program counter to R6
-	subOneInsFromR6 = "\nsub r6, #4" # substract 4 from the pc adress, so it now points to instruction 0 of the base ANM function, which is used by duif
 	add = "\nsub r4, #1" # point the memory adress away from adress 0, so it it starts at adress 1
 	allocate = "\nsub sp, #"+ str(length)# this jumps 4 * length in stack to alocate the memory. Each "word" is 4 bytes.
+	movePcToR6 = "\nmov r6, pc" # move the program counter to R6, which now holds the very next instruction
 
 
-	return "\n\n" + label + pushRegisters + moveSpToR0 + moveSpToR1 + add + allocate
+	return "\n\n" + label + pushRegisters + moveSpToR0 + moveSpToR1 + add + allocate +  movePcToR6
 
 
 def Hok() -> str:
@@ -147,21 +157,19 @@ def Does() -> str:
 	"""
 	label = "\ndoes:"
 	push = "\npush {lr}"
-	setMemoryCounter = "\nmov r4, r0" #set the value or r0 in r4, which is the memory counter
+	correct = "\nsub r0, r5, r0" # substract the value in r0, from the base memory counter so it points to the correct adress. and place this in r0
+	setMemoryCounter = "\nmov r4, r0" #set the value or r0 in r4, which is the memory counter, so the memory counter now points to the wanted place
 	pop = "\npop {pc}"
-	return "\n" + label + push + setMemoryCounter + pop
+	return "\n" + label + push + correct + setMemoryCounter + pop
 
 
-def Duif() -> str:
-	"""Function to create a label to set the program counter to whatever is in r0
+def Duif(args : str) -> str:
+	"""Function to create assembly to jump somewhere
 
 	Returns:
 		str: A string containing assembly
 	"""
-	label = "\nduif:"
-	add = "\nadd r0,r6" # get the original pc from r6, and add this to r0, this will be where the program counter needs to continue its execution
-	code = "\nmov pc, r0"
-	return "\n" + label + add + code  #create a duif label and set the value of r0 in the program counter
+	return "\nb " + args # branch to label
 
 
 def Schaap() -> str:

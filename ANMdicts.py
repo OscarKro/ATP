@@ -8,7 +8,7 @@ lambdaDict = {"weide": lambda w : ANMtokens.Weide_func(w), "wim":lambda w : ANMt
 "vuur": lambda w : ANMtokens.Vuur(w), "does": lambda w, v : ANMtokens.Does(w,v), "hok": lambda w : ANMtokens.Hok(w), "teun" : lambda w,v : ANMtokens.Teun(w,v)}
 
 compilerLambdaDict = {"weide" : lambda *args : ANMCompilerTokens.Weide(), "hok": lambda *args : ANMCompilerTokens.Hok(), "wim": lambda *args : ANMCompilerTokens.branch_to(args[0]), "jet": lambda *args : ANMCompilerTokens.branch_to(args[0]),
-"does" : lambda *args: ANMCompilerTokens.set_scratch_registers(args[1])+ANMCompilerTokens.branch_to(args[0]), "duif" : lambda *args: ANMCompilerTokens.set_scratch_registers(args[1])+ANMCompilerTokens.branch_to(args[0]), "schaap" : lambda *args : ANMCompilerTokens.branch_to(args[0]),
+"does" : lambda *args: ANMCompilerTokens.set_scratch_registers(args[1])+ANMCompilerTokens.branch_to(args[0]), "duif" : lambda *args: ANMCompilerTokens.Duif(args[0]), "schaap" : lambda *args : ANMCompilerTokens.branch_to(args[0]),
 "lam" : lambda *args : ANMCompilerTokens.branch_to(args[0]), "teun" : lambda *args : ANMCompilerTokens.set_scratch_registers(args[1])+ANMCompilerTokens.branch_to(args[0])
 ,"aap" : lambda *args : ANMCompilerTokens.set_scratch_registers(args[1],args[2],args[3])+ANMCompilerTokens.branch_to(args[0]), "noot" : lambda *args : ANMCompilerTokens.set_scratch_registers(args[1])+
 ANMCompilerTokens.branch_to(args[0]),"mies" : lambda *args : ANMCompilerTokens.branch_to(args[0]),"vuur": lambda *args: ANMCompilerTokens.branch_to(args[0])} 

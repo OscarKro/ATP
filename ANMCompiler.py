@@ -4,6 +4,7 @@ from ANMdicts import checkNrParamDict,compilerLambdaDict
 from typing import Union,List
 import os.path
 import sys
+import copy
 
 def hold_console():
     i = input()
@@ -35,6 +36,28 @@ def translate(l : List[Union[str,int]]) -> str:
     args = l[0:nrOfParam+1]
     f = compilerLambdaDict.get(args[0]) 
     return f(*args) + translate(l[nrOfParam+1:])
+
+def translate_to_asm_list(l: List[Union[str,int]]) -> List[List[str]] :
+    if (len(l) == 0):
+        return []
+    if (len(l) == 1):
+        f = compilerLambdaDict.get(l[0])
+        return [[f(l[0])]]
+    nrOfParam = checkNrParamDict.get(l[0])
+    args = l[0:nrOfParam+1]
+    f = compilerLambdaDict.get(args[0])
+    return [[f(*args)]] + translate_to_asm_list(l[nrOfParam+1:])
+
+def create_list_with_dovs(l : list[Union[str,int]], el : List[List]) -> List[List[str]]:
+    newList = copy.deepcopy(el)
+    if (len(l) <= 1):
+        return newList
+    if (l[0] == "duif"):
+        jumpTo = l[1]
+        label = "_L" + str(jumpTo)
+        newList[jumpTo-1] = [label]
+        return create_list_with_dovs(l[1:],newList)
+    return create_list_with_dovs(l[1:],newList)
 
 #Get the user input and the file name
 #============================================================================
@@ -69,7 +92,6 @@ a = start_code_section()
 a += Wim()
 a += Jet()
 a += Does()
-a += Duif()
 a += Schaap()
 a += Lam()
 a += Teun()
@@ -80,6 +102,8 @@ a += Vuur()
 a += start_of_ANM_and_allocate_memory_on_stack(memorySize,"_" + nameOfFile)
 
 a += translate(lexedData[0])
+create_list_with_dovs(lexedData[0],[[]]*len(lexedData[0]))
+print(translate_to_asm_list(lexedData[0]))
 asmFile = open(nameOfFile + ".asm", "w")
 asmFile.write(a)
 asmFile.close()
