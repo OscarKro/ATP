@@ -101,8 +101,6 @@ def start_of_ANM_and_allocate_memory_on_stack(length : int, label : str) -> str:
 	add = "\nsub r4, #1" # point the memory adress away from adress 0, so it it starts at adress 1
 	allocate = "\nsub sp, #"+ str(length)# this jumps 4 * length in stack to alocate the memory. Each "word" is 4 bytes.
 	movePcToR6 = "\nmov r6, pc" # move the program counter to R6, which now holds the very next instruction, just for safekeeping,should i ever need it
-
-
 	return "\n\n" + label + pushRegisters + moveSpToR0 + moveSpToR1 + add + allocate +  movePcToR6
 
 
@@ -120,7 +118,10 @@ def Weide() -> str:
 	Returns:
 		str: A string containing assembly
 	"""
-	return "\nmov pc, [r5]"
+	#ask jan how to contatinate the string "_L" with whatever is on r4
+	getTheLinkingLabel = "\nmov r0,r4"
+	branch = "\nb _L?//there should be a weide here, ask jan"
+	return getTheLinkingLabel + branch
 
 
 def Wim() -> str:
@@ -190,16 +191,19 @@ def Teun() -> str:
 	return add + mov
 
 
-def Aap() -> str:
+def Aap(i : int) -> str:
 	"""Function to create a label to cmp r0 with r1 and go to r2 if they are equal. r0, r1 and r2 should all be memory adresses
 
 	Returns:
 		str: A string containing assembly code
 	"""
+	addAddress0ToBase = "\nadd r0, r5"
+	addAddress1ToBase = "\nadd r1, r5"
 	getAddress0 = "\nmov r0, [r0]" #get the content of the first parameter from the stack memory and place it in r0
-	compare = "\ncmp r0, [r1]" #compare the content of r0 with the content on adress r1 from the stack memory
-	beq = "\nbeq r2" #branch to the third paramater if these two are equal
-	return getAddress0 + compare + beq 
+	getAddress1 = "\nmov r1, [r1]" #get the content of the second parameter from the stack memory and place it in r1
+	compare = "\ncmp r0, r1" #compare the content of r0 with the content on adress r1 from the stack memory
+	beq = "\nbeq _L" + str(i) #branch to the third paramater if these two are equal"
+	return addAddress0ToBase + addAddress1ToBase + getAddress0 + getAddress1 + compare + beq 
 
 
 def Noot () -> str:
@@ -217,7 +221,7 @@ def Mies() -> str:
 	Returns:
 		str: nothing
 	"""
-	return "\nnop"
+	return "\nnop // how to do cout? ask jan"
 
 
 def Vuur() -> str:

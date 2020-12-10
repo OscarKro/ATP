@@ -91,7 +91,7 @@ class Lexer:
                 return [] + self.__seek_syntax_errors(tail)
         else:
             head, *tail = l
-            return ["SYNTAX ERROR: instruction '" + str(head) + "' doest not existeth.Thee shouldst asketh f'r something yond exists, to beest 'r not to beest, yond is the questioneth"] + self.__seek_syntax_errors(tail)
+            return ["Syntax error: instruction '" + str(head) + "' doest not existeth.Thee shouldst asketh f'r something yond exists, to beest 'r not to beest, yond is the questioneth"] + self.__seek_syntax_errors(tail)
        
 
     
