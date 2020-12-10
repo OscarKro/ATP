@@ -100,7 +100,7 @@ def start_of_ANM_and_allocate_memory_on_stack(length : int, label : str) -> str:
 	moveSpToR1 = "\nmov r5, r4" # also keep the original start of the memory in r5 so we can always jump there or get it if needed
 	add = "\nsub r4, #1" # point the memory adress away from adress 0, so it it starts at adress 1
 	allocate = "\nsub sp, #"+ str(length)# this jumps 4 * length in stack to alocate the memory. Each "word" is 4 bytes.
-	movePcToR6 = "\nmov r6, pc" # move the program counter to R6, which now holds the very next instruction
+	movePcToR6 = "\nmov r6, pc" # move the program counter to R6, which now holds the very next instruction, just for safekeeping,should i ever need it
 
 
 	return "\n\n" + label + pushRegisters + moveSpToR0 + moveSpToR1 + add + allocate +  movePcToR6
@@ -129,11 +129,7 @@ def Wim() -> str:
 	Returns:
 		str: A string containing assembly
 	"""
-	label = "\nwim:"
-	push = "\npush {lr}"
-	increaseMemoryCounter = "\nsub r4, #1" #increase the memory counter by one word
-	pop = "\npop {pc}"
-	return "\n" + label + push + increaseMemoryCounter + pop
+	return "\nsub r4, #1" #increase the memory counter by one word
 
 
 def Jet() -> str:
@@ -142,11 +138,7 @@ def Jet() -> str:
 	Returns:
 		str: A string containing assembly
 	"""
-	label = "\njet:"
-	push = "\npush {lr}"
-	decreaseMemoryCounter = "\nadd r4, #1" #decrease the memory counter by one word
-	pop = "\npop {pc}"
-	return "\n" + label + push + decreaseMemoryCounter + pop
+	return "\nadd r4, #1" #decrease the memory counter by one word
 
 
 def Does() -> str:
@@ -155,12 +147,9 @@ def Does() -> str:
 	Returns:
 		str: A string containing assembly
 	"""
-	label = "\ndoes:"
-	push = "\npush {lr}"
 	correct = "\nsub r0, r5, r0" # substract the value in r0, from the base memory counter so it points to the correct adress. and place this in r0
 	setMemoryCounter = "\nmov r4, r0" #set the value or r0 in r4, which is the memory counter, so the memory counter now points to the wanted place
-	pop = "\npop {pc}"
-	return "\n" + label + push + correct + setMemoryCounter + pop
+	return correct + setMemoryCounter
 
 
 def Duif(args : str) -> str:
@@ -178,11 +167,7 @@ def Schaap() -> str:
 	Returns:
 		str: A string containing assembly
 	"""
-	label = "\nschaap:"
-	push = "\npush {lr}"
-	add = "\nadd [r4] #1" # add one to where the memory counter is pointing to
-	pop = "\npop {pc}"
-	return "\n" + label + push + add + pop
+	return "\nadd [r4] #1" # add one to where the memory counter is pointing to
 
 
 def Lam() -> str:
@@ -191,12 +176,8 @@ def Lam() -> str:
 	Returns:
 		str: A string containing assembly
 	"""
-	label = "\nlam:"
-	push = "\npush {lr}"
-	sub = "\nsub [r4] #1" # substract one from where the memory counter is pointing to
-	pop = "\npop {pc}"
-	return "\n" + label + push + sub + pop
-
+	
+	return "\nsub [r4] #1" # substract one from where the memory counter is pointing to
 
 def Teun() -> str:
 	"""Function to create a label to place the value of r0 in to the memory to where the memory pointer on r4 is currently pointing to
@@ -204,12 +185,9 @@ def Teun() -> str:
 	Returns:
 		str: A string containing assembly
 	"""
-	label = "\nteun:"
-	push = "\npush {lr}"
 	add = "\nadd r0, r5" # set the pointer to the correct memory adress in r0, using r5, which holds the stack pointer from when the memory was still to be created, so adress 0
 	mov = "\nmov [r4], [r0]" # move the value from adress r0 into where the memory counter currently points to
-	pop = "\npop {pc}"
-	return "\n" + label + push + add + mov + pop
+	return add + mov
 
 
 def Aap() -> str:
@@ -218,13 +196,10 @@ def Aap() -> str:
 	Returns:
 		str: A string containing assembly code
 	"""
-	label = "\naap:"
-	push = "\npush {lr}"
 	getAddress0 = "\nmov r0, [r0]" #get the content of the first parameter from the stack memory and place it in r0
 	compare = "\ncmp r0, [r1]" #compare the content of r0 with the content on adress r1 from the stack memory
 	beq = "\nbeq r2" #branch to the third paramater if these two are equal
-	pop = "\npop {pc}"
-	return "\n" + label + push + getAddress0 + compare + beq + pop
+	return getAddress0 + compare + beq 
 
 
 def Noot () -> str:
@@ -233,11 +208,7 @@ def Noot () -> str:
 	Returns:
 		str: A string containing assembly
 	"""
-	label = "\nnoot:"
-	push = "\npush {lr}"
-	setValue = "\nmov [r4], r0" # write the value of r0 into the adress thats on r4, which is the memory counter
-	pop = "\npop {pc}"
-	return "\n" + label + push + setValue + pop
+	return "\nmov [r4], r0" # write the value of r0 into the adress thats on r4, which is the memory counter
 
 
 def Mies() -> str:
@@ -246,7 +217,7 @@ def Mies() -> str:
 	Returns:
 		str: nothing
 	"""
-	return "\nmov pc, lr"
+	return "\nnop"
 
 
 def Vuur() -> str:
@@ -255,8 +226,7 @@ def Vuur() -> str:
 	Returns:
 		str: A string containing assembly code
 	"""
-	label = "\nvuur:"
 	deallocate = "\nmov sp, r5" #place the original stack pointer back into r1
 	popRegisters = "\npop {r4,r5,r6,pc}\n" # pop all the registers back
-	return "\n" + label + deallocate + popRegisters
+	return deallocate + popRegisters
 

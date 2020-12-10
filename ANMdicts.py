@@ -7,8 +7,8 @@ lambdaDict = {"weide": lambda w : ANMtokens.Weide_func(w), "wim":lambda w : ANMt
 "schaap":lambda w : ANMtokens.Schaap(w),"lam":lambda w : ANMtokens.Lam(w),"aap":lambda w,x,y,a: ANMtokens.Aap(w,x,y,a),"noot": lambda w,v: ANMtokens.Noot(w,v),"mies": lambda w: ANMtokens.Mies(w),
 "vuur": lambda w : ANMtokens.Vuur(w), "does": lambda w, v : ANMtokens.Does(w,v), "hok": lambda w : ANMtokens.Hok(w), "teun" : lambda w,v : ANMtokens.Teun(w,v)}
 
-compilerLambdaDict = {"weide" : lambda *args : ANMCompilerTokens.Weide(), "hok": lambda *args : ANMCompilerTokens.Hok(), "wim": lambda *args : ANMCompilerTokens.branch_to(args[0]), "jet": lambda *args : ANMCompilerTokens.branch_to(args[0]),
-"does" : lambda *args: ANMCompilerTokens.set_scratch_registers(args[1])+ANMCompilerTokens.branch_to(args[0]), "duif" : lambda *args: ANMCompilerTokens.Duif(args[0]), "schaap" : lambda *args : ANMCompilerTokens.branch_to(args[0]),
+compilerLambdaDict = {"weide" : lambda *args : ANMCompilerTokens.Weide(), "hok": lambda *args : ANMCompilerTokens.Hok(), "wim": lambda *args : ANMCompilerTokens.Wim(), "jet": lambda *args : ANMCompilerTokens.Jet(),
+"does" : lambda *args: ANMCompilerTokens.set_scratch_registers(args[1])+ANMCompilerTokens.Does(), "duif" : lambda *args: ANMCompilerTokens.Duif("_D"+str(args[1])), "schaap" : lambda *args : ANMCompilerTokens.Schaap(),
 "lam" : lambda *args : ANMCompilerTokens.branch_to(args[0]), "teun" : lambda *args : ANMCompilerTokens.set_scratch_registers(args[1])+ANMCompilerTokens.branch_to(args[0])
-,"aap" : lambda *args : ANMCompilerTokens.set_scratch_registers(args[1],args[2],args[3])+ANMCompilerTokens.branch_to(args[0]), "noot" : lambda *args : ANMCompilerTokens.set_scratch_registers(args[1])+
-ANMCompilerTokens.branch_to(args[0]),"mies" : lambda *args : ANMCompilerTokens.branch_to(args[0]),"vuur": lambda *args: ANMCompilerTokens.branch_to(args[0])} 
+,"aap" : lambda *args : ANMCompilerTokens.set_scratch_registers(args[1],args[2],args[3])+ANMCompilerTokens.Aap(), "noot" : lambda *args : ANMCompilerTokens.set_scratch_registers(args[1])+
+ANMCompilerTokens.Noot(),"mies" : lambda *args : ANMCompilerTokens.Mies(),"vuur": lambda *args: ANMCompilerTokens.Vuur()} 

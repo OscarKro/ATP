@@ -4,13 +4,13 @@ import os.path
 import sys
 
 def stop():
-    print("couldn't execute program. Errors found")
+    print("Couldn't executeth programeth.  Err'rs hath found")
     exit()
 print("filepath: ", end = ' ')
 
 i = input()
 if not os.path.isfile(i):
-    print("No file found")
+    print("Nay fileth hath found")
     stop()
 
 #test functie voor de decorator, niet gebruiken.

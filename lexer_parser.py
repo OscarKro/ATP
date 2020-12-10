@@ -72,21 +72,26 @@ class Lexer:
         nrOfParam = checkNrParamDict.get(l[0],None)
         if nrOfParam != None:
             if (l[0] == "duif" and l[1] <= 0):
-                return ["SYNTAX ERROR: 'Duif' instruction cannot jump to 0 or negative numers"] + self.__seek_syntax_errors([])
+                return ["Syntax error: 'duif' instruction cannot jumpeth to 0 'r negative numb'rs. A dove cannot flyeth into the negative"] + self.__seek_syntax_errors([])
+            if (l[0] == "hok"):
+                try:
+                    x = l.index("weide")
+                except ValueError:
+                    return ["Syntax error: instruction 'hok' hast nay closing 'weide'. How can i closeth a doth'r without a handleth?"] + self.__seek_syntax_errors([])
             if nrOfParam > 0:
                 if 1 + nrOfParam > len(l):
-                    return ["SYNTAX ERROR: last instruction does not have the correct amount of instruction"] + self.__seek_syntax_errors([])
+                    return ["Syntax error: lasteth instruction doest not has't the c'rrect amount of instruction"] + self.__seek_syntax_errors([])
                 else:
                     head, *tail = l[nrOfParam:]
                     if not all(map(lambda i : isinstance(i,int),l[1:nrOfParam+1])): #if not every parameter is numeric
-                        return ["SYNTAX ERROR: not all parameters of word: '" + str(l[0]) + "' are integers"] + self.__seek_syntax_errors(tail)
+                        return ["Syntax error: not all paramet'rs of w'rd: '" + str(l[0]) + "' art integ'rs. I only accepteth integ'rs as valid wage"] + self.__seek_syntax_errors(tail)
                     return [] + self.__seek_syntax_errors(tail) 
             else:
                 head, *tail = l
                 return [] + self.__seek_syntax_errors(tail)
         else:
             head, *tail = l
-            return ["SYNTAX ERROR: instruction '" + str(head) + "' does not exist"] + self.__seek_syntax_errors(tail)
+            return ["SYNTAX ERROR: instruction '" + str(head) + "' doest not existeth.Thee shouldst asketh f'r something yond exists, to beest 'r not to beest, yond is the questioneth"] + self.__seek_syntax_errors(tail)
        
 
     
@@ -99,8 +104,8 @@ class Lexer:
         #check for wrong words, number of parameters and if they are numbers
         #============================================================================
         errorList = []
-        # if (lexedList[0] != "weide"):
-        #     errorList.append("SYNTAX ERROR: first instruction should always be 'weide'")
+        if (lexedList[len(lexedList)-1] != "vuur"):
+            errorList.append("syntax error: lasteth instruction shouldst at each moment beest 'vuur'. burneth thy pastures at which hour thou art done!")
         errorList += self.__seek_syntax_errors(lexedList) # check if the syntax is correct, if not, errorList is filled with errors
         return (lexedList,errorList)
 
