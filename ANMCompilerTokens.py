@@ -5,13 +5,15 @@ A = TypeVar('A')
 B = TypeVar('B')
 C = TypeVar('C')
 
-def start_code_section() -> str:
+def start_code_section(s : str) -> str:
 	"""Function that creates assembly for the start of a text section and alignment on four bytes (one 32 bit word)
 
+	Args:
+		s (str): the name of this whole function
 	Returns:
 		str: A string containing assembly code
 	"""
-	return "\n" + ".section .text\n.align 4\n"
+	return "\n" + ".section .text\n.align 4\n.global " + s
 
 def start_data_section() -> str:
 	"""Function that creates assembly the start of a data section and alignment on four bytes (one 32 bit word)
@@ -221,7 +223,9 @@ def Mies() -> str:
 	Returns:
 		str: nothing
 	"""
-	return "\nnop // how to do cout? ask jan"
+	setnumber = "\nmov r0, [r4]"
+	branch = "\nbl print"
+	return setnumber + branch
 
 
 def Vuur() -> str:

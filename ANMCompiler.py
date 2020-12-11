@@ -161,7 +161,7 @@ if len(lexedData[1]) > 0:
 #Create the base Assembly with all the labels
 #============================================================================
 memorySize = 100
-asmText = start_code_section()
+asmText = start_code_section(nameOfFile)
 asmText += start_of_ANM_and_allocate_memory_on_stack(memorySize,nameOfFile)
 shetsChangedToDovs = change_shet_to_dov(lexedData[0])
 listWithCompiledCode = create_assembly_instructions(shetsChangedToDovs)
