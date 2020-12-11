@@ -1,3 +1,13 @@
 __*
 .vscode
 .asm
+*.o
+_cc_flags
+_cpp_flags
+_linker_flags
+*.o
+*.c
+*.bin
+*.elf
+*.ld
+*.map

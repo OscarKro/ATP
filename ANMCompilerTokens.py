@@ -69,7 +69,7 @@ def create_move(dest : str, value : int) -> str:
 	Returns:
 		str: A string containing assembly
 	"""
-	return "\nmov " + dest + ", #" + str(value)
+	return "\nmov " + dest + ",#" + str(value)
 
 def set_scratch_registers(*args : int) -> str:
 	"""Function to create assembly move instructions to set values into registers r0, r1, r2,r3.
@@ -100,8 +100,8 @@ def start_of_ANM_and_allocate_memory_on_stack(length : int, label : str) -> str:
 	pushRegisters = ":\npush {r4,r5,r6,lr}" # push all original registers for safekeeping
 	moveSpToR0 = "\nmov r4, sp" # set the stack pointer into r4, which is now the "memory pointer"
 	moveSpToR1 = "\nmov r5, r4" # also keep the original start of the memory in r5 so we can always jump there or get it if needed
-	add = "\nsub r4, #1" # point the memory adress away from adress 0, so it it starts at adress 1
-	allocate = "\nsub sp, #"+ str(length)# this jumps 4 * length in stack to alocate the memory. Each "word" is 4 bytes.
+	add = "\nsub r4, #4" # point the memory adress away from adress 0, so it it starts at adress 1
+	allocate = "\nsub sp, #"+ str(length*4)# this jumps 4 * length in stack to alocate the memory. Each "word" is 4 bytes.
 	movePcToR6 = "\nmov r6, pc" # move the program counter to R6, which now holds the very next instruction, just for safekeeping,should i ever need it
 	return "\n\n" + label + pushRegisters + moveSpToR0 + moveSpToR1 + add + allocate +  movePcToR6
 
@@ -121,41 +121,47 @@ def Weide() -> str:
 		str: A string containing assembly
 	"""
 	#ask jan how to contatinate the string "_L" with whatever is on r4
-	getTheLinkingLabel = "\nmov r0,r4"
+	getTheLinkingLabel = "\nmov r0, r4"
 	branch = "\nb _L?//there should be a weide here, ask jan"
 	return getTheLinkingLabel + branch
 
 
 def Wim() -> str:
+	#tested, working
 	"""Function to create a label that adds one to the memory pointer
 
 	Returns:
 		str: A string containing assembly
 	"""
-	return "\nsub r4, #1" #increase the memory counter by one word
+	return "\nsub r4, #4" #increase the memory counter by one word
 
 
 def Jet() -> str:
+	#tested, working
 	"""Function to create a label that substracts one from the memory pointer
 
 	Returns:
 		str: A string containing assembly
 	"""
-	return "\nadd r4, #1" #decrease the memory counter by one word
+	return "\nadd r4, #4" #decrease the memory counter by one word
 
 
 def Does() -> str:
+	#tested, working
 	"""Function to create a label to set the memory counter to whatever is set in r0
 
 	Returns:
 		str: A string containing assembly
 	"""
+	set1 = "\nmov r1, #4"
+	multiply = "\nmul r0, r0, r1"
 	correct = "\nsub r0, r5, r0" # substract the value in r0, from the base memory counter so it points to the correct adress. and place this in r0
 	setMemoryCounter = "\nmov r4, r0" #set the value or r0 in r4, which is the memory counter, so the memory counter now points to the wanted place
-	return correct + setMemoryCounter
+	return set1 + multiply + correct + setMemoryCounter
 
 
 def Duif(args : str) -> str:
+	#tested, working
 	"""Function to create assembly to jump somewhere
 
 	Returns:
@@ -165,70 +171,87 @@ def Duif(args : str) -> str:
 
 
 def Schaap() -> str:
+	#tested, working
 	"""Function to create a label to add one to wherever the memory counter (r4) is pointing to
 
 	Returns:
 		str: A string containing assembly
 	"""
-	return "\nadd [r4] #1" # add one to where the memory counter is pointing to
-
+	mov = "\nldr r0, [r4]"
+	add = "\nadd r0, #1"
+	store = "\nstr r0, [r4]"
+	return mov + add + store 
 
 def Lam() -> str:
+	#tested, working
 	"""Function to create a label to substract one from wherever the memory counter (r4) is pointing to
 
 	Returns:
 		str: A string containing assembly
 	"""
-	
-	return "\nsub [r4] #1" # substract one from where the memory counter is pointing to
+	mov = "\nldr r0, [r4]"
+	sub = "\nsub r0, #1"
+	store = "\nstr r0, [r4]"
+	return mov + sub + store 
 
 def Teun() -> str:
-	"""Function to create a label to place the value of r0 in to the memory to where the memory pointer on r4 is currently pointing to
+	#tested, working
+	"""Function to create a label to place the value of the adress in r0 in to the memory to where the memory pointer on r4 is currently pointing to (copy)
 
 	Returns:
 		str: A string containing assembly
 	"""
-	add = "\nadd r0, r5" # set the pointer to the correct memory adress in r0, using r5, which holds the stack pointer from when the memory was still to be created, so adress 0
-	mov = "\nmov [r4], [r0]" # move the value from adress r0 into where the memory counter currently points to
-	return add + mov
+	mov1 = "\nmov r1, #4" #for multiplying
+	createOffset = "\nmul r0, r0, r1" 
+	getAddress = "\nsub r0, r5, r0"
+	getNumber = "\nldr r1, [r4]"
+	store = "\nstr r1, [r0]"
+	return mov1 + createOffset + getAddress + getNumber + store
 
 
 def Aap(i : int) -> str:
+	#tested, working
 	"""Function to create a label to cmp r0 with r1 and go to r2 if they are equal. r0, r1 and r2 should all be memory adresses
 
 	Returns:
 		str: A string containing assembly code
 	"""
-	addAddress0ToBase = "\nadd r0, r5"
-	addAddress1ToBase = "\nadd r1, r5"
-	getAddress0 = "\nmov r0, [r0]" #get the content of the first parameter from the stack memory and place it in r0
-	getAddress1 = "\nmov r1, [r1]" #get the content of the second parameter from the stack memory and place it in r1
-	compare = "\ncmp r0, r1" #compare the content of r0 with the content on adress r1 from the stack memory
+	mov1 = "\nmov r3,#4"
+	mul1 = "\nmul r0,r3"
+	mul2 = "\nmul r1,r3"
+	createAddress1 = "\nsub r0, r5, r0"
+	createAddress2 = "\nsub r1, r5, r1"
+	get1 = "\nldr r0, [r0]"
+	get2 = "\nldr r1, [r1]"
+	c = "\ncmp r0, r1"
 	beq = "\nbeq _L" + str(i) #branch to the third paramater if these two are equal"
-	return addAddress0ToBase + addAddress1ToBase + getAddress0 + getAddress1 + compare + beq 
+	return mov1 + mul1 + mul2 + createAddress1 + createAddress2 + get1 + get2 + c + beq
 
 
 def Noot () -> str:
+	#tested, working
 	"""Function to create a label to place r0 in the adress thats on r4, the memory pointer
 
 	Returns:
 		str: A string containing assembly
 	"""
-	return "\nmov [r4], r0" # write the value of r0 into the adress thats on r4, which is the memory counter
+	return "\nstr r0, [r4]" # write the value of r0 into the adress thats on r4, which is the memory counter
 
 
 def Mies() -> str:
+	#tested, working
 	"""This function needs to be made using c++, ask Jan?
 
 	Returns:
 		str: nothing
 	"""
-	setnumber = "\nmov r0, [r4]"
+	setnumber = "\nldr r0, [r4]"
 	branch = "\nbl print"
 	return setnumber + branch
 
 
 def Vuur() -> str:
+	#tested, working
 	"""Function that creates a label that stops the execution of ANM code and pops the lr back in to the pc to resume where other code was
 
 	Returns:

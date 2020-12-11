@@ -32,7 +32,7 @@ other instructions in between. Whenever the algorithm reads the "hok" instructio
 | duif | 1 | jump to other line/instruction of parameter 1 |
 | schaap | 0 | increase the integer within the memory at the place the mp currently points to |
 | lam | 0 |  decrease the integer within the memory at the place the mp currently points to |
-| teun | 1 | set the value of the memory where te mp currently points to, to the value that is in the memory on the address of parameter 1 |
+| teun | 1 | set the value of the memory where te mp currently points to, to the value that is in the memory on the address of parameter 1 (copy from mp to parameter address) |
 | aap | 3 | If content of memory address on parameter 1 is equal to content of memory address on parameter 2, jump to instruction 3, else go to next instruction |
 | noot | 1 | set the value of parameter 1 on the address where the mp currently points to |
 | mies | 0 | print the value of where the mp currently points to |

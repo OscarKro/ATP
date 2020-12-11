@@ -146,17 +146,18 @@ f = Reader(i)
 if f[1] != "":
     print(f[1])
     stop()
+#print(f[0])
 
 #Lex whatever has been read
 #============================================================================
 lexer = Lexer()
 lexedData = lexer.lex(f[0])
-
-#print the errors and exit the interperter if errors were found
+#print the errors and exit the compiler if errors were found
 #============================================================================
 if len(lexedData[1]) > 0:
     x = list(map(lambda i : print(i),lexedData[1])) 
     stop()
+#print(lexedData[0])
 
 #Create the base Assembly with all the labels
 #============================================================================
@@ -165,7 +166,7 @@ asmText = start_code_section(nameOfFile)
 asmText += start_of_ANM_and_allocate_memory_on_stack(memorySize,nameOfFile)
 shetsChangedToDovs = change_shet_to_dov(lexedData[0])
 listWithCompiledCode = create_assembly_instructions(shetsChangedToDovs)
-for ins in listWithCompiledCode:
+for ins in listWithCompiledCode: #this for loop is approved by Jan on 11-12 ~ 16:50!
     asmText += ins
 
 #Write the ASM text in the file

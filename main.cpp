@@ -1,9 +1,16 @@
-#include <iostream>
+#include "../hwlib/library/hwlib.hpp"
 
-extern "C"
+extern "C" void print(int x)
 {
-    void print(int x)
-    {
-        std::cout << x;
-    }
+    hwlib::cout << x << "\n";
+    return;
+}
+extern "C" void aapnootmies();
+
+int main (void)
+{
+    hwlib::wait_ms(2000); 
+    hwlib::cout << "start AapNootMies\n";
+    aapnootmies();
+    hwlib::cout << "end AapNootMies\n";
 }

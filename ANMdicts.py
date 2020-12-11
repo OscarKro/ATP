@@ -9,6 +9,6 @@ interperterlambdaDict = {"weide": lambda w : ANMtokens.Weide_func(w), "wim":lamb
 
 compilerLambdaDict = {"weide" : lambda *args : ANMCompilerTokens.Weide(), "hok": lambda *args : ANMCompilerTokens.Hok(), "wim": lambda *args : ANMCompilerTokens.Wim(), "jet": lambda *args : ANMCompilerTokens.Jet(),
 "does" : lambda *args: ANMCompilerTokens.set_scratch_registers(args[1])+ANMCompilerTokens.Does(), "duif" : lambda *args: ANMCompilerTokens.Duif("_L"+str(args[1]-1)), "schaap" : lambda *args : ANMCompilerTokens.Schaap(),
-"lam" : lambda *args : ANMCompilerTokens.branch_to(args[0]), "teun" : lambda *args : ANMCompilerTokens.set_scratch_registers(args[1])+ANMCompilerTokens.Teun()
+"lam" : lambda *args : ANMCompilerTokens.Lam(), "teun" : lambda *args : ANMCompilerTokens.set_scratch_registers(args[1])+ANMCompilerTokens.Teun()
 ,"aap" : lambda *args : ANMCompilerTokens.set_scratch_registers(args[1],args[2])+ANMCompilerTokens.Aap(args[3]-1), "noot" : lambda *args : ANMCompilerTokens.set_scratch_registers(args[1])+
 ANMCompilerTokens.Noot(),"mies" : lambda *args : ANMCompilerTokens.Mies(),"vuur": lambda *args: ANMCompilerTokens.Vuur()} 
