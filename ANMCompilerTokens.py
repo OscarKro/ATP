@@ -106,13 +106,13 @@ def start_of_ANM_and_allocate_memory_on_stack(length : int, label : str) -> str:
 	return "\n\n" + label + pushRegisters + moveSpToR0 + moveSpToR1 + add + allocate +  movePcToR6
 
 
-def Hok() -> str:
-	"""Function to jump to whatever is set in r0. Used for the skipping of code to the next weide instruction
+def Hok(args : int) -> str:
+	"""Function that returns a hok label
 
 	Returns:
 		str: A string containing assembly
 	"""
-	return "\nmov pc, r0"
+	return "\n\n_H" + str(args) + ":" + "\npush {lr}" 
 
 def Weide() -> str:
 	"""Function to create a string that moves the content of r5 (the adress 0 of the memory where the user linking register is) to the program counter
@@ -120,11 +120,18 @@ def Weide() -> str:
 	Returns:
 		str: A string containing assembly
 	"""
-	#ask jan how to contatinate the string "_L" with whatever is on r4
-	getTheLinkingLabel = "\nmov r0, r4"
-	branch = "\nb _L?//there should be a weide here, ask jan"
-	return getTheLinkingLabel + branch
+	return "\npop {pc}"
 
+def Bok(args : int) -> str:
+	"""Function to create a label to jump to a function created by a hok and weide
+
+	Args:
+		args (int): The hok number to branch link to
+
+	Returns:
+		str: A string containing assembly
+	"""
+	return "\nbl _H" + str(args)
 
 def Wim() -> str:
 	#tested, working
@@ -162,7 +169,7 @@ def Does() -> str:
 
 def Duif(args : str) -> str:
 	#tested, working
-	"""Function to create assembly to jump somewhere
+	"""Function to create assembly to jump somewhere. You can only jump within functions or the main. Not from a hok to the main or the other way around, use a bok for that
 
 	Returns:
 		str: A string containing assembly
@@ -209,8 +216,7 @@ def Teun() -> str:
 	return mov1 + createOffset + getAddress + getNumber + store
 
 
-def Aap(i : int) -> str:
-	#tested, working
+def Aap(b1 : str, b2 : str) -> str:
 	"""Function to create a label to cmp r0 with r1 and go to r2 if they are equal. r0, r1 and r2 should all be memory adresses
 
 	Returns:
@@ -224,8 +230,9 @@ def Aap(i : int) -> str:
 	get1 = "\nldr r0, [r0]"
 	get2 = "\nldr r1, [r1]"
 	c = "\ncmp r0, r1"
-	beq = "\nbeq _L" + str(i) #branch to the third paramater if these two are equal"
-	return mov1 + mul1 + mul2 + createAddress1 + createAddress2 + get1 + get2 + c + beq
+	beq = "\nbeq " + b1 #branch to the third paramater if these two are equal"
+	bne = "\nbne " + b2
+	return mov1 + mul1 + mul2 + createAddress1 + createAddress2 + get1 + get2 + c + beq + bne
 
 
 def Noot () -> str:
@@ -258,6 +265,6 @@ def Vuur() -> str:
 		str: A string containing assembly code
 	"""
 	deallocate = "\nmov sp, r5" #place the original stack pointer back into r1
-	popRegisters = "\npop {r4,r5,r6,pc}\n" # pop all the registers back
+	popRegisters = "\npop {r4,r5,r6,pc}" # pop all the registers back
 	return deallocate + popRegisters
 
