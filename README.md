@@ -33,7 +33,7 @@ other instructions in between. Whenever the interperter reads the "hok x" instru
 
 # Instructions
 | instruction | required paramaters | explanation | But why?...|
-| ----------- | ----------- | ----------- |
+| ----------- | ----------- | ----------- | ----------- |
 | hok | 1 | Create a function with the identifier as the first parameter | A 'hok' is a Dutch word for a pen. Animals are placed inside a pen. Just like a function is placed in between to boundaries.|
 | weide | 0 |  Jump back to where the linking register was pointing to | A 'weide' is a Dutch word for pasture. When a pen is opened, animals are released into the pasture. Or, the program counter is once again free from the function and can continue the main.|
 | bok | 1 | Call the function with the identifier of the parameter | a 'bok' is a male goat. They jump on stuff. This instruction jumps to the start of a function|
