@@ -32,23 +32,23 @@ A function is created by writing a "hok x" instruction and a "weide" instruction
 other instructions in between. Whenever the interperter reads the "hok x" instruction during execution, it skips all code untill it sees a "weide" instruction, it then begins to execute the next piece of code after the "weide" instruction. The compiler simply creates a new assembly label from the hok which it cuts away from the main. Meaning you can create incapsulated pieces of code in between a hok and weide instruction that are never used. Every 'hok' has a number, which is its identifier. You can use a 'bok x' instruction to call the function you wish to call. In the interperter, this bok also sets the linking register to wherever it came from. The compiler uses the assembly linking register. So when the end of the function is called (with a 'weide') it jumps back to where it was. Notice that when the code is compiled you can use recursion, when the code is interperter you cannot use recursion. You cannot use a 'duif' to jump from the main, into a 'hok'. A 'bok' needs to be used to call a function. There will be undefined behaviour if you do. Within a 'hok' or the main body you can use a 'duif' to jump to different lines. Because of the nature of the language, you can use 'duif' instructions between 'hokken'. I see no use for it, but go nuts with it. There may be some undefined behaviour however, so be carefull.
 
 # Instructions
-| instruction | required paramaters | explanation |
+| instruction | required paramaters | explanation | But why?...|
 | ----------- | ----------- | ----------- |
-| hok | 1 | Create a function with the identifier as the first parameter |
-| weide | 0 |  Jump back to where the linking register was pointing to |
-| bok | 1 | Call the function with the identifier of the parameter |
-| wim | 0 | Increase the memory pointer ( mp ) by one |
-| jet | 0 | Decrease the mp by one |
-| does | 1 | set the mp to the value of parameter 1 |
-| duif | 1 | jump to other line/instruction of parameter 1 |
-| schaap | 0 | increase the integer within the memory at the place the mp currently points to |
-| lam | 0 |  decrease the integer within the memory at the place the mp currently points to |
-| teun | 1 | set the value of the memory where te mp currently points to, to the value that is in the memory on the address of parameter 1 (copy from mp to parameter address) |
-| aap | 2 | If content of memory address on parameter 1 is equal to content of memory address on parameter 2, execute the next instruction, otherwise execute the second next instruction|
-| noot | 1 | set the value of parameter 1 on the address where the mp currently points to |
-| mies | 0 | print the value of where the mp currently points to |
+| hok | 1 | Create a function with the identifier as the first parameter | A 'hok' is a Dutch word for a pen. Animals are placed inside a pen. Just like a function is placed in between to boundaries.|
+| weide | 0 |  Jump back to where the linking register was pointing to | A 'weide' is a Dutch word for pasture. When a pen is opened, animals are released into the pasture. Or, the program counter is once again free from the function and can continue the main.|
+| bok | 1 | Call the function with the identifier of the parameter | a 'bok' is a male goat. They jump on stuff. This instruction jumps to the start of a function|
+| wim | 0 | Increase the memory pointer ( mp ) by one | Wim is a male Dutch name. The carrier of this name is male. Males are generally bigger, so plus one. |
+| jet | 0 | Decrease the mp by one | Jet is a female Dutch name. The carrier of this name is female. Females are generally smaller, so minus one |
+| does | 1 | set the mp to the value of parameter 1 | The kids in the Netherlands use the picture above as a start for learning to read and write. Does is a Dutch name and dog associated in the picture above with the name is dutch shepherd dog. Which are very fast and run from one side of the herd to the other at high speeds. So a does jumps you to which place in the memory you decide at high speed.|
+| duif | 1 | jump to other line/instruction of parameter 1 | A 'duif' is the Dutch word for dov. Dovs can fly, so with this instruction you can fly ot another instruction|
+| schaap | 0 | increase the integer within the memory at the place the mp currently points to |  A 'schaap' is the Dutch word for sheep. A sheep is an adult which are generally larger than kids, so plus one. |
+| lam | 0 |  decrease the integer within the memory at the place the mp currently points to | A 'lam' is the Dutch word for lamb. A lamb is the kids version of a sheep, which is generally smaller than an adult. So minus one. |
+| teun | 1 | set the value of the memory where te mp currently points to, to the value that is in the memory on the address of parameter 1 (copy from mp to parameter address) | Teun is Dutch name. The guy associated with the name 'Teun' in the picture above, looks a bit curious. Just as this instruction requires me to think and read it twice. Making it curious. Just as Teun. |
+| aap | 2 | If content of memory address on parameter 1 is equal to content of memory address on parameter 2, execute the next instruction, otherwise execute the second next instruction| A 'aap' is a Dutch word for monkey. A monkey has two arms and hands and likes to grab two things and look at them. Maybe even compare them? As does this instruction. |
+| noot | 1 | set the value of parameter 1 on the address where the mp currently points to | A 'noot' is the dutch word for nut. A nut generally has something inside it, like a walnut. So this instruction has something inside, and places this in the memory. Nuts are also liked by monkeys, and opened by them to look at or eat them.|
+| mies | 0 | print the value of where the mp currently points to | Mies is a Dutch female name. I knew a Mies once and boy, she had a voice like a broken violin on steroids. She would break windows if she screamed. So, this Mies instruction 'screams' whatever you want it to. |
 | vuur | 0 | stop execution, this instruction always has to be placed at the end of each file. It may also be placed on other lines.
-
+| 'Vuur' is the Dutch word for fire. In some countries, farmers are still allowed to burn their pastures to increase fertillity (not allowed in the Netherlands anymore). They essential burn all plants and living things back to carbon which makes the ground reusable. Just like this instruction, you stop everything, and you can start anew.
 
 ## Example 1, increase register
 This small example below will count from 1 to 10 and display each result
