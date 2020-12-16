@@ -38,9 +38,9 @@ def Weide_func(w : Weide) -> Weide:
     Returns:
         Weide: A new weide object with the pc set to the value of memorylist[0]
     """
-    return Weide(cp(w.instructionMemoryList),cp(w.memoryList),cp(w.memoryList[0])-1,cp(w.mc))
+    return Weide(cp(w.instructionMemoryList),cp(w.memoryList),cp(w.memoryList[0]),cp(w.mc))
 
-def Hok(w : Weide) -> Weide:
+def Hok(w : Weide, h : int) -> Weide:
     """Function to jump to the "end" of this function. A "hok" instruction creates a function the user can call. When the interperter encounters this function inline, it just needs
     to skip to the end of the function which is marked by a "weide" instruction and continue the rest of the image.
 
@@ -50,10 +50,25 @@ def Hok(w : Weide) -> Weide:
     Returns:
         Weide: A new weide object with the program counter set to the next "weide" instruction, which marks the end of a function
     """
-    if w.instructionMemoryList[w.pc][0] == 'weide':
-        return Weide(cp(w.instructionMemoryList),cp(w.memoryList),cp(w.pc)+1,cp(w.mc))
-    else:
-        return Hok(Weide(cp(w.instructionMemoryList),cp(w.memoryList),cp(w.pc)+1,cp(w.mc)))
+    i = w.instructionMemoryList.index(['weide'])
+    return Weide(cp(w.instructionMemoryList),cp(w.memoryList),i+1,cp(w.mc))
+
+def Bok(w : Weide, i : int) -> Weide:
+    """Function to jump to a hok function. This is the only function to be used to jump to hokken as this also sets register 0 in the memorylist. Which determines where
+    to go to after a function call
+
+    Args:
+        w (Weide): a Weide object
+        i (int): The hok number
+
+    Returns:
+        Weide: A new weide with the program counter set to the index with the hok
+    """
+    i = w.instructionMemoryList.index(['hok',i])
+    i += 1
+    memL = cp(w.memoryList)
+    memL[0] = cp(w.pc)+1
+    return Weide(cp(w.instructionMemoryList),memL,i,cp(w.mc))
 
 def Wim(w : Weide) -> Weide:
     """Function to increase the memory counter by one
@@ -146,22 +161,19 @@ def Teun(w : Weide, v : int) -> Weide:
     x[w.mc] = cp(x[v])
     return Weide(cp(w.instructionMemoryList),x,cp(w.pc)+1,cp(w.mc))
 
-def Aap(w : Weide,x : int, y : int, goto : int) -> Weide:
-    """Function to compare two adresses and jump to the third parameter if they are equal or continue with the next instruction if they are unequal (BEQ)
-
+def Aap(w : Weide,x : int, y : int) -> Weide:
+    """Function to compare two adresses and execute the next instruction if they are equal. If they are unequal it does the next instruction after that
     Args:
         w (Weide): A weide object
         x (int): The first memory adress from which the content needs to be compared
         y (int): The second memory adress from which the content needs to be compared
-        goto (int): The instruction adress (line) to jump to if x and y are equal
-
     Returns:
-        Weide: A new weide object with the program counter set to the outcome of comparison
+        Weide: A new weide object with the program counter set to the outcome of the comparison
     """
     if (w.memoryList[x] == w.memoryList[y]):
-        return Weide(cp(w.instructionMemoryList),cp(w.memoryList),cp(goto)-1,cp(w.mc))
-    else:
         return Weide(cp(w.instructionMemoryList),cp(w.memoryList),cp(w.pc)+1,cp(w.mc))
+    else:
+        return Weide(cp(w.instructionMemoryList),cp(w.memoryList),cp(w.pc)+2,cp(w.mc))
 
 
 def Noot(w : Weide, v : int) -> Weide:

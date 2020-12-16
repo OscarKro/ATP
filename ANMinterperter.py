@@ -76,7 +76,7 @@ parser = Parser()
 parsedData = parser.parse(lexedData[0])
 #execute
 #============================================================================
-l = [0] * 1001 # create the size 1000 memory
+l = [0] * 100 # create the size 100 memory
 w = Weide(parsedData,l,0,1) #create the first weide with the pc to the first instruction, and the mc set to adress 1 so the linking register is initialy left alone
 while True:
     instruction = interperterlambdaDict.get(w.instructionMemoryList[w.pc][0],None)
