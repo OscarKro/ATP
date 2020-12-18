@@ -203,6 +203,20 @@ def Mies(w : Weide) -> Weide:
     print(w.memoryList[w.mc])
     return Weide(cp(w.instructionMemoryList),cp(w.memoryList),cp(w.pc)+1,cp(w.mc))
 
+def Kees(w : Weide,i : int) -> Weide:
+    """Function to copy the mc into a register. So you get the value of the mc
+
+    Args:
+        w (Weide): A weide object
+        i (int): The memory adress you want to place the mc in
+
+    Returns:
+        Weide: A new weide object
+    """
+    mem = cp(w.memoryList)
+    mem[i] = cp(w.mc)
+    return Weide(cp(w.instructionMemoryList),mem,cp(w.pc)+1,w.mc)
+
 
 def Vuur(w : Weide) -> Weide:
     """Function to finish execution

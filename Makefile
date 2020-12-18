@@ -9,8 +9,7 @@
 #############################################################################
 
 # source files in this project (main.cpp is automatically assumed)
-SOURCES := aapnootmies.asm
-
+SOURCES := fibonacci.asm
 # header files in this project
 HEADERS :=
 

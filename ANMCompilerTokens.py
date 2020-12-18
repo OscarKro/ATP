@@ -72,6 +72,7 @@ def create_move(dest : str, value : int) -> str:
 	return "\nmov " + dest + ",#" + str(value)
 
 def set_scratch_registers(*args : int) -> str:
+	#tested, working
 	"""Function to create assembly move instructions to set values into registers r0, r1, r2,r3.
 
 	Args:
@@ -85,6 +86,7 @@ def set_scratch_registers(*args : int) -> str:
 
 
 def start_of_ANM_and_allocate_memory_on_stack(length : int, label : str) -> str:
+	#tested, working
 	"""Function that creates the start of AapNootMies in assembly. It pushes r4/r11 and the lr to the stack and increases the stack pointer by length. So a piece of memory on the stack 
 	is created. The function also copies the SP to R4 and substractes the length of the memory from it. Meaning a new memory pointer is created that is set to adress 1 of 32 bit word.
 	The assembly code resulting from this function has no exit. Instead, "deallocate_memory_on_stack_and_end_ANM" should be called to create the code to exit and a branch to "_exit_ANM"
@@ -107,6 +109,7 @@ def start_of_ANM_and_allocate_memory_on_stack(length : int, label : str) -> str:
 
 
 def Hok(args : int) -> str:
+	#tested, working
 	"""Function that returns a hok label
 
 	Returns:
@@ -115,6 +118,7 @@ def Hok(args : int) -> str:
 	return "\n\n_H" + str(args) + ":" + "\npush {lr}" 
 
 def Weide() -> str:
+	#tested, working
 	"""Function to create a string that moves the content of r5 (the adress 0 of the memory where the user linking register is) to the program counter
 
 	Returns:
@@ -123,6 +127,7 @@ def Weide() -> str:
 	return "\npop {pc}"
 
 def Bok(args : int) -> str:
+	#tested, working
 	"""Function to create a label to jump to a function created by a hok and weide
 
 	Args:
@@ -217,6 +222,7 @@ def Teun() -> str:
 
 
 def Aap(b1 : str, b2 : str) -> str:
+	#tested, working
 	"""Function to create a label to cmp r0 with r1 and go to r2 if they are equal. r0, r1 and r2 should all be memory adresses
 
 	Returns:
@@ -247,14 +253,28 @@ def Noot () -> str:
 
 def Mies() -> str:
 	#tested, working
-	"""This function needs to be made using c++, ask Jan?
+	"""Function to create a label to use a print label to cout something
 
 	Returns:
-		str: nothing
+		str: A string containing assembly
 	"""
 	setnumber = "\nldr r0, [r4]"
 	branch = "\nbl print"
 	return setnumber + branch
+
+def Kees() -> str:
+	#tested, working
+	"""Function to place the number in the memory counter on whatever adress that is set in r0
+
+	Returns:
+		str: A string containg assembly
+	"""
+	set1 = "\nmov r1, #4"
+	mul = "\nmul r0, r0, r1"
+	sub = "\nsub r0, r5, r0"
+	store = "\nstr r4, [r0]"
+	return set1+mul+sub+store
+
 
 
 def Vuur() -> str:
